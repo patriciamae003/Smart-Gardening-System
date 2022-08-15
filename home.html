@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<!-- Created by CodingLab |www.youtube.com/CodingLabYT-->
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <title>Greenie: The Smart Irrigator</title>
+    <!--<title> Responsive Sidebar Menu  | CodingLab </title>-->
+    <link rel="stylesheet" href="home.css">
+    <!--Script for Firebase, Bootstrap, & Manual Button-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,600;1,400;1,500;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
+    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="weather.js" defer></script>
+    <!-- Boxicons CDN Link -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   </head>
+<body>
+  <div class="sidebar">
+    <div class="logo-details">
+      <i class='bx bx-globe icon'></i>
+        <div class="logo_name">Greenie</div>
+        <i class='bx bx-menu' id="btn" ></i>
+    </div>
+    <ul class="nav-list">
+      <li>
+        <a href="home.html">
+          <i class='bx bxs-home'></i>
+          <span class="links_name">Home</span>
+        </a>
+         <span class="tooltip">Home</span>
+      </li>
+      <li>
+       <a href="herbs.html">
+         <i class='bx bxs-tree' ></i>
+         <span class="links_name">Herbs</span>
+       </a>
+       <span class="tooltip">Herbs</span>
+     </li>
+     <li>
+       <a href="history.html">
+         <i class='bx bxs-book' ></i>
+         <span class="links_name">Metrics</span>
+       </a>
+       <span class="tooltip">Metrics</span>
+     </li>
+     <li>
+       <a href="about.html">
+         <i class='bx bxs-user' ></i>
+         <span class="links_name">About</span>
+       </a>
+       <span class="tooltip">About</span>
+     </li>
+    </ul>
+  </div>
+  <section class="home-section">
+    <script>
+      var firebaseConfig = {
+        apiKey: "AIzaSyCtgqDlOObAqXaR_p1iYbwgjVtdaAc_UmA",
+        authDomain: "greenie-dc274.firebaseapp.com",
+        databaseURL: "https://greenie-dc274-default-rtdb.firebaseio.com",
+        projectId: "greenie-dc274",
+        storageBucket: "greenie-dc274.appspot.com",
+        messagingSenderId: "409338776023",
+        appId: "1:409338776023:web:f918e7e46b56924a9da392",
+        measurementId: "G-7W9YY3DQDX"
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+
+      var database = firebase.database();
+      var ManualStatus;
+      var NutrientPumpStatus;
+      var ManualCounter = 0;
+
+      database.ref().on("value", function(snap){
+		    ManualStatus = snap.val().ManualStatus;
+        NutrientPumpStatus = snap.val().NutrientPumpStatus;
+        ManualCounter = snap.val().ManualCounter;
+	    });
+
+      function manualButtonClick()
+      {
+        var firebaseRef2 = firebase.database().ref().child("ManualStatus");
+        var firebaseRef3 = firebase.database().ref().child("ManualCounter");
+
+        if(ManualStatus == "1"){    // post to firebase
+			    firebaseRef2.set("0");
+			    ManualStatus = "0";
+          document.getElementById("pumpID").innerHTML=("Water Pump: Off");
+          document.getElementById("manualWaterToggle").innerHTML=("Start");
+          document.getElementById("manualWaterToggle").className=("btn btn-primary");
+		    }   else {
+			    firebaseRef2.set("1");
+			    ManualStatus = "1";
+          document.getElementById("pumpID").innerHTML=("Water Pump: On");
+          document.getElementById("manualWaterToggle").innerHTML=("Stop");
+          document.getElementById("manualWaterToggle").className=("btn btn-danger");
+          ManualCounter++;
+          firebaseRef3.set(ManualCounter);
+		    }
+      }
+
+      function nutrientPumpClick()
+      {
+        var firebaseRef3 = firebase.database().ref().child("NutrientPumpStatus");
+
+        if(NutrientPumpStatus == "1"){    // post to firebase
+			    firebaseRef3.set("0");
+			    NutrientPumpStatus = "0";
+          document.getElementById("nutrientPumpID").innerHTML=("Nutrient Pump: Off");
+          document.getElementById("manualNutrientToggle").innerHTML=("Start");
+          document.getElementById("manualNutrientToggle").className=("btn btn-primary");
+		    }   else {
+			    firebaseRef3.set("1");
+			    NutrientPumpStatus = "1";
+          document.getElementById("nutrientPumpID").innerHTML=("Nutrient Pump: On");
+          document.getElementById("manualNutrientToggle").innerHTML=("Stop");
+          document.getElementById("manualNutrientToggle").className=("btn btn-danger");
+		    }
+      }
+
+      // Retrieve sensors info 
+      firebase.database().ref('Sensors/').once('value').then(function (snapshot) {
+        var soil = snapshot.val().Soil;
+        var rain = snapshot.val().Rain;
+        var ph = snapshot.val().pH;
+        var temp = snapshot.val().Temperature;
+        var hum = snapshot.val().Humidity;
+
+        document.getElementById("soilVal").innerHTML = soil;
+        document.getElementById("rainVal").innerHTML = rain;
+        document.getElementById("phVal").innerHTML = ph;
+        document.getElementById("tempVal").innerHTML = temp + (" &deg;F");
+        document.getElementById("humVal").innerHTML = hum + (" %");
+      
+      });
+      
+    </script>
+      <div class="text">
+        Greenie: The Smart Irrigator
+      </div>
+      <div class="controlCenter">
+        <div>
+          <h4 class="manualWaterPump" id="pumpID">Water Pump: Off</h4>
+          <div class = "buttonWrapper">
+          <button class="btn btn-primary" onclick=manualButtonClick() id="manualWaterToggle">Start</button>
+          </div>
+          <h4 class="manualNutrientPump" id="nutrientPumpID">Nutrient Pump: Off</h4>
+          <div class = "buttonWrapper">
+          <button class="btn btn-primary" onclick=nutrientPumpClick() id="manualNutrientToggle">Start</button>
+          </div>
+        </div>
+        <div class="weatherContainer">
+          <div class="weatherCard">
+            <div class="weatherSearch">
+              <input type="text" class="searchBar", placeholder="Search">
+              <button class="fa fa-search"></button>
+            </div>
+            <div class="page loading">
+              <div class="mainWeather">
+                <h2 class="city">Weather Check</h2>
+                <h1 class="temp">Temp: °F</h1>
+              </div>
+              <img src="https://openweathermap.org/img/wn/04n.png" alt="" class="icon" />
+              <div class="subWeather">
+                <div class="description">Description</div>
+                <div class="humidity">Humidity: %</div>
+                <div class="speed">Wind Speed: km/h</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="soilPanel">
+        <h3>Soil Moisture</h3>
+        <span class='update' id="soilVal"></span>
+        <div class="sensorDescription">
+          <p>(0 - 1023)<br>
+          <span class="readMore">
+            Wet Soil: 0 - 350<br>
+            Well-Drained Soil: 351 - 650<br>
+            Dry Soil: 651 - 1023<br>
+          </span>
+          </p>  
+          <span class="readMoreBtn">Read More...</span>
+        </div>
+      </div>
+      
+
+      <div class="rainPanel">
+        <h3>Rain Level</h3>
+        <span class='update' id="rainVal"></span>
+        <div class="sensorDescription">
+          <p>(0 - 1023)<br>
+          <span class="readMore">
+            Raining: 0 - 400<br>
+            Not Raining: 401 - 1023<br>
+          </span>
+          </p>  
+          <span class="readMoreBtn">Read More...</span>
+        </div>
+      </div>
+      
+
+      <div class="phPanel">
+        <h3>pH Level</h3>
+        <span class='update' id="phVal"></span>
+        <div class="sensorDescription">
+          <p>(0 - 14)<br>
+          <span class="readMore">
+            Acidic: 0 - 6<br>
+            Neutral: 7<br>
+            Alkaline: 8 - 14<br>
+          </span>
+          </p>  
+          <span class="readMoreBtn">Read More...</span>
+        </div>
+      </div>
+
+      <div class="tempPanel">
+        <h3>Temperature</h3>
+        <span class='update' id="tempVal"></span>
+        <div class="sensorDescription">
+          <p>(32 - 122)<br>
+          </p>  
+        </div>
+      </div>
+
+       <div class="humPanel">
+        <h3>Humidity</h3>
+        <span class='update' id="humVal"></span>
+        <div class="sensorDescription">
+          <p>(20 - 90)<br>
+          </p>  
+        </div>
+      </div>
+
+  </section>
+  <script>
+  let sidebar = document.querySelector(".sidebar");
+  let closeBtn = document.querySelector("#btn");
+  let searchBtn = document.querySelector(".bx-search");
+
+  closeBtn.addEventListener("click", ()=>{
+    sidebar.classList.toggle("open");
+    menuBtnChange();//calling the function(optional)
+  });
+
+  searchBtn.addEventListener("click", ()=>{ // Sidebar open when you click on the search iocn
+    sidebar.classList.toggle("open");
+    menuBtnChange(); //calling the function(optional)
+  });
+
+  // following are the code to change sidebar button(optional)
+  function menuBtnChange() {
+   if(sidebar.classList.contains("open")){
+     closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");//replacing the iocns class
+   }else {
+     closeBtn.classList.replace("bx-menu-alt-right","bx-menu");//replacing the iocns class
+   }
+  }
+  </script>
+
+  <script>
+  const parentPanel = document.querySelector(".soilPanel");
+  
+  parentPanel.addEventListener("click", event =>{
+    const current = event.target;
+    const isReadMoreBtn = current.className.includes("readMoreBtn");
+
+    if(!isReadMoreBtn) 
+      return;
+
+    const currentText = event.target.parentNode.querySelector(".readMore");
+
+    currentText.classList.toggle("readMore--show");
+
+    current.textContent = current.textContent.includes("Read More") ? "Read Less" : "Read More...";
+
+  })
+  </script>
+
+  <script>
+  const parentPanel2 = document.querySelector(".rainPanel");
+  
+  parentPanel2.addEventListener("click", event =>{
+    const current2 = event.target;
+    const isReadMoreBtn = current2.className.includes("readMoreBtn");
+
+    if(!isReadMoreBtn) 
+      return;
+
+    const currentText2 = event.target.parentNode.querySelector(".readMore");
+
+    currentText2.classList.toggle("readMore--show");
+
+    current2.textContent = current2.textContent.includes("Read More") ? "Read Less" : "Read More...";
+
+  })
+  </script>
+
+  <script>
+  const parentPanel3 = document.querySelector(".phPanel");
+  
+  parentPanel3.addEventListener("click", event =>{
+    const current3 = event.target;
+    const isReadMoreBtn = current3.className.includes("readMoreBtn");
+
+    if(!isReadMoreBtn) 
+      return;
+
+    const currentText3 = event.target.parentNode.querySelector(".readMore");
+
+    currentText3.classList.toggle("readMore--show");
+
+    current3.textContent = current3.textContent.includes("Read More") ? "Read Less" : "Read More...";
+
+  })
+  </script>
+  
+</body>
+</html>

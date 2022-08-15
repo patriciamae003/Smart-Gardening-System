@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<!-- Created by CodingLab |www.youtube.com/CodingLabYT-->
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <title>Greenie: The Smart Irrigator</title>
+    <!--<title> Responsive Sidebar Menu  | CodingLab </title>-->
+    <link rel="stylesheet" href="history.css">
+    <!-- Boxicons CDN Link -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+   </head>
+<body>
+  <div class="sidebar">
+    <div class="logo-details">
+      <i class='bx bx-globe icon'></i>
+        <div class="logo_name">Greenie</div>
+        <i class='bx bx-menu' id="btn" ></i>
+    </div>
+    <ul class="nav-list">
+      <li>
+        <a href="home.html">
+          <i class='bx bxs-home'></i>
+          <span class="links_name">Home</span>
+        </a>
+         <span class="tooltip">Home</span>
+      </li>
+      <li>
+       <a href="herbs.html">
+         <i class='bx bxs-tree' ></i>
+         <span class="links_name">Herbs</span>
+       </a>
+       <span class="tooltip">Herbs</span>
+     </li>
+     <li>
+       <a href="history.html">
+         <i class='bx bxs-book' ></i>
+         <span class="links_name">Metrics</span>
+       </a>
+       <span class="tooltip">Metrics</span>
+     </li>
+     <li>
+       <a href="about.html">
+         <i class='bx bxs-user' ></i>
+         <span class="links_name">About</span>
+       </a>
+       <span class="tooltip">About</span>
+     </li>
+    </ul>
+  </div>
+  <section class="home-section">
+      <div class="text">Metrics</div>
+      <div class="chart-container">
+        <div class="waterChartTitle">Water/Nutrient Usage Estimate (mL/sec)</div>
+        <canvas id="waterChart"></canvas>
+      </div>
+      <div class="chart-container2">
+        <div class="averageChartTitle">Average Sensor Reading Estimate (5 Automated Readings)</div>
+        <canvas id="averageChart"></canvas>
+        <div class="averageReadingsTitle">
+          <p>Soil Average: 465</p>
+          <p>Temperature Average: 73</p>
+          <p>Humidity Average: 52</p>
+          <p>pH Average: 7.2</p>
+          <p>Rain Average: 210</p>
+        </div>
+      </div>
+      <div class="chart-container3">
+        <div class="usageChartTitle">Manual/Automated Pump Usage Estimate (%)</div>
+          <canvas id="usageChart"></canvas>
+      </div>
+      <script>
+          var data = {
+          labels: ["Water/Nutrient Usage"],
+          datasets: [{
+            label: ["Total Water Dispensed"],
+            backgroundColor: ["#2f07e2"], 
+            borderColor: "black",
+            borderWidth: 2,
+            data: [65],
+          },{
+            label: ["Water Conserved"],
+            backgroundColor: ["#85b5fdfb"], 
+            borderColor: "black",
+            borderWidth: 2,
+            data: [26],
+          },{
+            label: ["Total Nutrient Dispensed"],
+            backgroundColor: ["#16ad2ab0"], 
+            borderColor: "black",
+            borderWidth: 2,
+            data: [59],
+          },{
+            label: ["Nutrient Conserved"],
+            backgroundColor: ["#5cfa71b0" ], 
+            borderColor: "black",
+            borderWidth: 2,
+            data: [16],
+          }]
+        };
+
+        var options = {
+          maintainAspectRatio: false,
+          indexAxis: 'y',
+        };
+
+        new Chart('waterChart', {
+          type: 'bar',
+          options: options,
+          data: data
+        });
+      </script>
+      <script>
+        var data = {
+        labels: ["1st Reading", "2nd Reading", "3rd Reading", "4th Reading", "5th Reading"],
+        datasets: [{
+          label: ["Soil Moisture"],
+          backgroundColor: ["#443e22"], 
+          borderColor: "black",
+          borderWidth: 2,
+          data: [489, 560, 520, 576, 430],
+        },{
+          label: ["Temperature"],
+          backgroundColor: ["#c20808de"], 
+          borderColor: "black",
+          borderWidth: 2,
+          data: [73, 68, 57, 76, 68],
+        }, {
+          label: ["Humidity"],
+          backgroundColor: ["#08c221de"], 
+          borderColor: "black",
+          borderWidth: 2,
+          data: [52, 42, 58, 87, 65],
+        }, {
+          label: ["pH"],
+          backgroundColor: ["#8d08c2de"], 
+          borderColor: "black",
+          borderWidth: 2,
+          data: [6.9, 7.5, 7.2, 7.1, 6.9],
+        },{
+          label: ["rain"],
+          backgroundColor: ["#c2b608de"], 
+          borderColor: "black",
+          borderWidth: 2,
+          data: [28, 26, 240, 360, 400],
+        }
+      ]
+      };
+
+      var options = {
+        maintainAspectRatio: false,
+      };
+
+      new Chart('averageChart', {
+        type: 'line',
+        options: options,
+        data: data
+      });
+      </script>
+      <script>
+          var data = {
+          labels: ["Manual Use", "Automated Use"],
+          datasets: [{
+            label: "Water Usage",
+            backgroundColor: ["#210697", "#85b5fdfb"], 
+            borderColor: "black",
+            borderWidth: 2,
+            data: [36, 59],
+          }]
+        };
+
+        var options = {
+          maintainAspectRatio: false,
+        };
+
+        new Chart('usageChart', {
+          type: 'pie',
+          options: options,
+          data: data
+        });
+      </script>
+  </section>
+  <script>
+  let sidebar = document.querySelector(".sidebar");
+  let closeBtn = document.querySelector("#btn");
+  let searchBtn = document.querySelector(".bx-search");
+
+  closeBtn.addEventListener("click", ()=>{
+    sidebar.classList.toggle("open");
+    menuBtnChange();//calling the function(optional)
+  });
+
+  searchBtn.addEventListener("click", ()=>{ // Sidebar open when you click on the search iocn
+    sidebar.classList.toggle("open");
+    menuBtnChange(); //calling the function(optional)
+  });
+
+  // following are the code to change sidebar button(optional)
+  function menuBtnChange() {
+   if(sidebar.classList.contains("open")){
+     closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");//replacing the iocns class
+   }else {
+     closeBtn.classList.replace("bx-menu-alt-right","bx-menu");//replacing the iocns class
+   }
+  }
+  </script>
+</body>
+</html>

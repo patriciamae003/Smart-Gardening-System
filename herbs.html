@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<!-- Created by CodingLab |www.youtube.com/CodingLabYT-->
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <title>Greenie: The Smart Irrigator</title>
+    <!--<title> Responsive Sidebar Menu  | CodingLab </title>-->
+    <link rel="stylesheet" href="herbs.css">
+    <!-- Boxicons CDN Link -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
+    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      thead {background-color: #04440c; color:seashell;}
+      </style>
+   </head>
+<body>
+  <div class="sidebar">
+    <div class="logo-details">
+      <i class='bx bx-globe icon'></i>
+        <div class="logo_name">Greenie</div>
+        <i class='bx bx-menu' id="btn" ></i>
+    </div>
+    <ul class="nav-list">
+      <li>
+        <a href="home.html">
+          <i class='bx bxs-home'></i>
+          <span class="links_name">Home</span>
+        </a>
+         <span class="tooltip">Home</span>
+      </li>
+      <li>
+       <a href="herbs.html">
+         <i class='bx bxs-tree' ></i>
+         <span class="links_name">Herbs</span>
+       </a>
+       <span class="tooltip">Herbs</span>
+     </li>
+     <li>
+       <a href="history.html">
+         <i class='bx bxs-book' ></i>
+         <span class="links_name">Metrics</span>
+       </a>
+       <span class="tooltip">Metrics</span>
+     </li>
+     <li>
+       <a href="about.html">
+         <i class='bx bxs-user' ></i>
+         <span class="links_name">About</span>
+       </a>
+       <span class="tooltip">About</span>
+     </li>
+    </ul>
+  </div>
+  <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyCtgqDlOObAqXaR_p1iYbwgjVtdaAc_UmA",
+      authDomain: "greenie-dc274.firebaseapp.com",
+      databaseURL: "https://greenie-dc274-default-rtdb.firebaseio.com",
+      projectId: "greenie-dc274",
+      storageBucket: "greenie-dc274.appspot.com",
+      messagingSenderId: "409338776023",
+      appId: "1:409338776023:web:f918e7e46b56924a9da392",
+      measurementId: "G-7W9YY3DQDX"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    var database = firebase.database();
+	  var BasilStatus;
+    var ThymeStatus;
+	  var BayLeafStatus;
+	  var LemongrassStatus;
+	  var OreganoStatus;
+	  var MintStatus;
+	  var SageStatus;
+	  var RosemaryStatus;
+	  var ChivesStatus;
+    var CilantroStatus;
+
+	  database.ref().on("value", function(snap){
+		  BasilStatus = snap.val().BasilStatus;
+      ThymeStatus = snap.val().ThymeStatus;
+		  BayLeafStatus = snap.val().BayLeafStatus;
+		  LemongrassStatus = snap.val().LemongrassStatus;
+		  OreganoStatus = snap.val().OreganoStatus;
+		  MintStatus = snap.val().MintStatus;
+		  SageStatus = snap.val().SageStatus;
+		  RosemaryStatus = snap.val().RosemaryStatus;
+		  ChivesStatus = snap.val().ChivesStatus;
+      CilantroStatus = snap.val().CilantroStatus;
+	  });
+
+    function basilButtonClick()
+    {
+      var firebaseRef2 = firebase.database().ref().child("BasilStatus");
+
+      if(BasilStatus == "1"){    // post to firebase
+			  firebaseRef2.set("0");
+			  BasilStatus = "0";
+        document.getElementById("herbID").innerHTML=("Herb Selected: None");
+        document.getElementById("basilButton").innerHTML=("Start");
+        document.getElementById("basilButton").className=("btn btn-primary");
+		  } else {
+			  firebaseRef2.set("1");
+			  BasilStatus = "1";
+        document.getElementById("herbID").innerHTML=("Herb Selected: Basil");
+        document.getElementById("basilButton").innerHTML=("Stop");
+        document.getElementById("basilButton").className=("btn btn-danger");
+		  }
+    }
+    function thymeButtonClick()
+    {
+      var firebaseRef3 = firebase.database().ref().child("ThymeStatus");
+
+      if(ThymeStatus == "1"){    // post to firebase
+			  firebaseRef3.set("0");
+			  ThymeStatus = "0";
+        document.getElementById("herbID").innerHTML=("Herb Selected: None");
+        document.getElementById("thymeButton").innerHTML=("Start");
+        document.getElementById("thymeButton").className=("btn btn-primary");
+		  } else {
+			  firebaseRef3.set("1");
+			  ThymeStatus = "1";
+        document.getElementById("herbID").innerHTML=("Herb Selected: Thyme");
+        document.getElementById("thymeButton").innerHTML=("Stop");
+        document.getElementById("thymeButton").className=("btn btn-danger");
+		  }
+    }
+    function bayLeafButtonClick()
+    {
+      var firebaseRef4 = firebase.database().ref().child("BayLeafStatus");
+
+      if(BayLeafStatus == "1"){    // post to firebase
+			  firebaseRef4.set("0");
+			  BayLeafStatus = "0";
+        document.getElementById("herbID").innerHTML=("Herb Selected: None");
+        document.getElementById("bayLeafButton").innerHTML=("Start");
+        document.getElementById("bayLeafButton").className=("btn btn-primary");
+		  } else {
+			  firebaseRef4.set("1");
+			  BayLeafStatus = "1";
+        document.getElementById("herbID").innerHTML=("Herb Selected: Bay Leaf");
+        document.getElementById("bayLeafButton").innerHTML=("Stop");
+        document.getElementById("bayLeafButton").className=("btn btn-danger");
+		  }
+    }
+    function lemongrassButtonClick()
+    {
+      var firebaseRef5 = firebase.database().ref().child("LemongrassStatus");
+
+      if(LemongrassStatus == "1"){    // post to firebase
+			  firebaseRef5.set("0");
+			  LemongrassStatus = "0";
+        document.getElementById("herbID").innerHTML=("Herb Selected: None");
+        document.getElementById("lemongrassButton").innerHTML=("Start");
+        document.getElementById("lemongrassButton").className=("btn btn-primary");
+		  } else {
+			  firebaseRef5.set("1");
+			  LemongrassStatus = "1";
+        document.getElementById("herbID").innerHTML=("Herb Selected: Lemongrass");
+        document.getElementById("lemongrassButton").innerHTML=("Stop");
+        document.getElementById("lemongrassButton").className=("btn btn-danger");
+		  }
+    }
+    function oreganoButtonClick()
+    {
+      var firebaseRef6 = firebase.database().ref().child("OreganoStatus");
+
+      if(OreganoStatus == "1"){    // post to firebase
+			  firebaseRef6.set("0");
+			  OreganoStatus = "0";
+        document.getElementById("herbID").innerHTML=("Herb Selected: None");
+        document.getElementById("oreganoButton").innerHTML=("Start");
+        document.getElementById("oreganoButton").className=("btn btn-primary");
+		  } else {
+			  firebaseRef6.set("1");
+			  OreganoStatus = "1";
+        document.getElementById("herbID").innerHTML=("Herb Selected: Oregano");
+        document.getElementById("oreganoButton").innerHTML=("Stop");
+        document.getElementById("oreganoButton").className=("btn btn-danger");
+		  }
+    }
+    function mintButtonClick()
+    {
+      var firebaseRef7 = firebase.database().ref().child("MintStatus");
+
+      if(MintStatus == "1"){    // post to firebase
+			  firebaseRef7.set("0");
+			  MintStatus = "0";
+        document.getElementById("herbID").innerHTML=("Herb Selected: None");
+        document.getElementById("mintButton").innerHTML=("Start");
+        document.getElementById("mintButton").className=("btn btn-primary");
+		  } else {
+			  firebaseRef7.set("1");
+			  MintStatus = "1";
+        document.getElementById("herbID").innerHTML=("Herb Selected: Mint");
+        document.getElementById("mintButton").innerHTML=("Stop");
+        document.getElementById("mintButton").className=("btn btn-danger");
+		  }
+    }
+    function sageButtonClick()
+    {
+      var firebaseRef8 = firebase.database().ref().child("SageStatus");
+
+      if(SageStatus == "1"){    // post to firebase
+			  firebaseRef8.set("0");
+			  SageStatus = "0";
+        document.getElementById("herbID").innerHTML=("Herb Selected: None");
+        document.getElementById("sageButton").innerHTML=("Start");
+        document.getElementById("sageButton").className=("btn btn-primary");
+		  } else {
+			  firebaseRef8.set("1");
+			  SageStatus = "1";
+        document.getElementById("herbID").innerHTML=("Herb Selected: Sage");
+        document.getElementById("sageButton").innerHTML=("Stop");
+        document.getElementById("sageButton").className=("btn btn-danger");
+		  }
+    }
+    function rosemaryButtonClick()
+    {
+      var firebaseRef9 = firebase.database().ref().child("RosemaryStatus");
+
+      if(RosemaryStatus == "1"){    // post to firebase
+			  firebaseRef9.set("0");
+			  RosemaryStatus = "0";
+        document.getElementById("herbID").innerHTML=("Herb Selected: None");
+        document.getElementById("rosemaryButton").innerHTML=("Start");
+        document.getElementById("rosemaryButton").className=("btn btn-primary");
+		  } else {
+			  firebaseRef9.set("1");
+			  RosemaryStatus = "1";
+        document.getElementById("herbID").innerHTML=("Herb Selected: Rosemary");
+        document.getElementById("rosemaryButton").innerHTML=("Stop");
+        document.getElementById("rosemaryButton").className=("btn btn-danger");
+		  }
+    }
+    function chivesButtonClick()
+    {
+      var firebaseRef10 = firebase.database().ref().child("ChivesStatus");
+
+      if(ChivesStatus == "1"){    // post to firebase
+			  firebaseRef10.set("0");
+			  ChivesStatus = "0";
+        document.getElementById("herbID").innerHTML=("Herb Selected: None");
+        document.getElementById("chivesButton").innerHTML=("Start");
+        document.getElementById("chivesButton").className=("btn btn-primary");
+		  } else {
+			  firebaseRef10.set("1");
+			  ChivesStatus = "1";
+        document.getElementById("herbID").innerHTML=("Herb Selected: Chives");
+        document.getElementById("chivesButton").innerHTML=("Stop");
+        document.getElementById("chivesButton").className=("btn btn-danger");
+		  }
+    }
+    function cilantroButtonClick()
+    {
+      var firebaseRef11 = firebase.database().ref().child("CilantroStatus");
+
+      if(CilantroStatus == "1"){    // post to firebase
+			  firebaseRef11.set("0");
+			  CilantroStatus = "0";
+        document.getElementById("herbID").innerHTML=("Herb Selected: None");
+        document.getElementById("cilantroButton").innerHTML=("Start");
+        document.getElementById("cilantroButton").className=("btn btn-primary");
+		  } else {
+			  firebaseRef11.set("1");
+			  CilantroStatus = "1";
+        document.getElementById("herbID").innerHTML=("Herb Selected: Cilantro");
+        document.getElementById("cilantroButton").innerHTML=("Stop");
+        document.getElementById("cilantroButton").className=("btn btn-danger");
+		  }
+    }
+  </script>
+  <section class="home-section">
+      <div class="text">Herb Selection</div>
+      <div>
+        <h4 class="herbSelected" id="herbID">Herb Selected: None</h4>
+      </div>
+      <div class="container">
+        <table class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">Herb Supported</th>
+              <th scope="col">Watering Requirements</th>
+              <th scope="col">Soil Preference</th>
+              <th scope="col">Ideal Humidity</th>
+              <th scope="col">Ideal Temperature</th>
+              <th scope="col">Ideal pH</th>
+              <th scope="col">Action</th>              
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Basil</th>
+              <td>Every Day</td>
+              <td>Well-Drained</td>
+              <td>40-60%</td>
+              <td>70-90°F</td>
+              <td>5.5-6.5</td>
+              <td>
+                <button class="btn btn-primary" onclick=basilButtonClick() id="basilButton">Start</button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Thyme</th>
+              <td>Every 2-3 Days</td>
+              <td>Moist/Well-Drained</td>
+              <td>40%</td>
+              <td>60-70°F</td>
+              <td>5.5-7.0</td>
+              <td>
+                <button class="btn btn-primary" onclick=thymeButtonClick() id="thymeButton">Start</button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Bay Leaf</th>
+              <td>Every 2-3 Days</td>
+              <td>Well-Drained</td>
+              <td>40%</td>
+              <td>> 20°F</td>
+              <td>6.0-7.0</td>
+              <td>
+                <button class="btn btn-primary" onclick=bayLeafButtonClick() id="bayLeafButton">Start</button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Lemongrass</th>
+              <td>Every 2-3 Days</td>
+              <td>Well-Drained</td>
+              <td>40%</td>
+              <td>65-80°F</td>
+              <td>6.5-7.0</td>
+              <td>
+                <button class="btn btn-primary" onclick=lemongrassButtonClick() id="lemongrassButton">Start</button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Oregano</th>
+              <td>Every 2-3 Days</td>
+              <td>Moist/Well-Drained</td>
+              <td>40%</td>
+              <td>50-70°F</td>
+              <td>6.5-7.0</td>
+              <td>
+                <button class="btn btn-primary" onclick=oreganoButtonClick() id="oreganoButton">Start</button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Mint</th>
+              <td>Every 2 Days</td>
+              <td>Moist/Well-Drained</td>
+              <td>70%</td>
+              <td>60-70°F</td>
+              <td>7.0-8.0</td>
+              <td>
+                <button class="btn btn-primary" onclick=mintButtonClick() id="mintButton">Start</button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Sage</th>
+              <td>Weekly</td>
+              <td>Well-Drained</td>
+              <td>40%</td>
+              <td>60-70°F</td>
+              <td>5.5-6.5</td>
+              <td>
+                <button class="btn btn-primary" onclick=sageButtonClick() id="sageButton">Start</button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Rosemary</th>
+              <td>Every 2 Days</td>
+              <td>Well-Drained</td>
+              <td>45-55%</td>
+              <td>55-80°F</td>
+              <td>5.0-6.0</td>
+              <td>
+                <button class="btn btn-primary" onclick=rosemaryButtonClick() id="rosemaryButton">Start</button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Chives</th>
+              <td>Every 2 Days</td>
+              <td>Well-Drained</td>
+              <td>40%</td>
+              <td>40-85°F</td>
+              <td>6.0-7.0</td>
+              <td>
+                <button class="btn btn-primary" onclick=chivesButtonClick() id="chivesButton">Start</button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Cilantro</th>
+              <td>Every 2 Days</td>
+              <td>Moist/Well-Drained</td>
+              <td>75%</td>
+              <td>40-75°F</td>
+              <td>6.5-7.0</td>
+              <td>
+                <button class="btn btn-primary" onclick=cilantroButtonClick() id="cilantroButton">Start</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  </section>
+  <script>
+  let sidebar = document.querySelector(".sidebar");
+  let closeBtn = document.querySelector("#btn");
+  let searchBtn = document.querySelector(".bx-search");
+
+  closeBtn.addEventListener("click", ()=>{
+    sidebar.classList.toggle("open");
+    menuBtnChange();//calling the function(optional)
+  });
+
+  searchBtn.addEventListener("click", ()=>{ // Sidebar open when you click on the search iocn
+    sidebar.classList.toggle("open");
+    menuBtnChange(); //calling the function(optional)
+  });
+
+  // following are the code to change sidebar button(optional)
+  function menuBtnChange() {
+   if(sidebar.classList.contains("open")){
+     closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");//replacing the iocns class
+   }else {
+     closeBtn.classList.replace("bx-menu-alt-right","bx-menu");//replacing the iocns class
+   }
+  }
+  </script>
+</body>
+</html>
